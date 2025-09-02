@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:types": "powershell -Command \"$env:PAYLOAD_CONFIG_PATH='src/payload.config.ts'; bunx payload generate:types\""
+    "generate:types": "payload generate:types",
+    "db:fresh": "payload migrate:fresh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
