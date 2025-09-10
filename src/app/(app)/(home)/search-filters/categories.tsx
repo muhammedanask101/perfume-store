@@ -1,15 +1,15 @@
 "use client";
 
-import { Category } from "@/payload-types";
 import { CategoryDropdown } from "./category-dropdown";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
 import { CategoriesSidebar } from "./categories-sidebar";
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
 
 interface Props {
-    data: any;
+    data: CategoriesGetManyOutput;
 }
 
 export const Categories = ({
@@ -25,7 +25,7 @@ export const Categories = ({
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const activeCategory = "all";
-    const activeCategoryIndex = data.findIndex((cat: Category) => cat.slug === activeCategory);
+    const activeCategoryIndex = data.findIndex((cat) => cat.slug === activeCategory);
     const isActiveCategoryHidden = activeCategoryIndex >= visibleCount && activeCategoryIndex !== -1;
     useEffect(() => {
         const calculateVisible = () => {
@@ -68,7 +68,7 @@ export const Categories = ({
             className="absolute opacity-0 pointer-events-none flex"
             style={{ position: "fixed", top: -9999, left: -9999 }}
         >
-            {data.map((category: Category) => (
+            {data.map((category) => (
                 <div key={category.id}>
                     <CategoryDropdown
                         category={category}
@@ -87,7 +87,7 @@ export const Categories = ({
             onMouseEnter={() => setIsAnyHovered(true)}
             onMouseLeave={() => setIsAnyHovered(false)}
             >
-                {data.slice(0, visibleCount).map((category: Category) => (
+                {data.slice(0, visibleCount).map((category) => (
                     <div key={category.id}>
                         <CategoryDropdown
                             category={category}

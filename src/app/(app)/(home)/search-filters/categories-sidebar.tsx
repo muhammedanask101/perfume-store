@@ -8,13 +8,12 @@ import {
 } from "@/components/ui/sheet";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Link from "next/link";
-import { Category } from "@/payload-types";
 import { use, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
 
 interface Props {
     open: boolean;
@@ -23,7 +22,7 @@ interface Props {
 
 export const CategoriesSidebar = ({
     open,
-    onOpenChange
+    onOpenChange,
 }: Props) => {
 
     const trpc = useTRPC();
@@ -31,8 +30,8 @@ export const CategoriesSidebar = ({
 
     const router = useRouter();
 
-    const [parentCategories, setParentCategories] = useState<Category[] | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [parentCategories, setParentCategories] = useState<CategoriesGetManyOutput | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[1] | null>(null);
 
     // if we have parent categories, show those, otherwise show root categories
 
@@ -42,10 +41,9 @@ export const CategoriesSidebar = ({
         setParentCategories(null);
         onOpenChange(open);
     }
-    const handleCategoryClick = (category: Category) => {
-        const subcats = category.subcategories?.docs ?? [];
-        if(subcats.length > 0) {
-            setParentCategories(subcats as Category[]);
+    const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
+        if(category.subcategories && category.subcategories.length > 0) {
+            setParentCategories(category.subcategories as unknown as CategoriesGetManyOutput);
             setSelectedCategory(category);
         } else {
             // This is a leaf category (no subcategories)
@@ -67,7 +65,7 @@ export const CategoriesSidebar = ({
     const handleBackClick = () => {
         if(parentCategories){
             setSelectedCategory(null);
-            setSelectedCategory(null);
+            setParentCategories(null);
         }
     }
 
@@ -95,15 +93,14 @@ export const CategoriesSidebar = ({
                             Back
                         </button>
                     )}
-                    {currentCategories?.map((category: Category) => (
+                    {currentCategories?.map((category) => (
                         <button
                             key={category.slug}
                             onClick={() => handleCategoryClick(category)}
                             className="w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center text-base font-medium"
                         >
                             {category.name}
-                            {/*CAUTION: Removed length of subcategories > 0*/}
-                            {category.subcategories && Array.isArray(category.subcategories) &&
+                            {category.subcategories &&
                                 category.subcategories.length > 0 && (
                                 <ChevronRightIcon className="size-4" />
                             )}

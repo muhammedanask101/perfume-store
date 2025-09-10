@@ -1,8 +1,9 @@
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
 import { Category } from "@/payload-types";
 import Link from "next/link";
 
 interface Props {
-    category: Category;
+    category: CategoriesGetManyOutput[1];
     isOpen: boolean;
     position: { top: number; left: number };
 }
@@ -13,9 +14,8 @@ export const SubcategoryMenu = ({
     position
 }: Props) => {
 
-    const subcategories = (category as Category & { subcategories?: Category[] }).subcategories;
 
-    if( !isOpen || !subcategories || (subcategories ?? []).length === 0){
+    if( !isOpen || !category.subcategories || (category.subcategories ?? []).length === 0){
         return null;
     }
 
@@ -34,7 +34,7 @@ export const SubcategoryMenu = ({
             style={{ backgroundColor }}
             className="w-60 text-black rounded-md overflow-hidden border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px]">
                 <div>
-                    {subcategories?.map((subcategory: Category) => (
+                    {category.subcategories?.map((subcategory: Category) => (
                         <Link
                         key={subcategory.slug}
                         href={`/${category.slug}/${subcategory.slug}`} 
