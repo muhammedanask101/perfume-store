@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
+import { CategoriesSidebar } from "./categories-sidebar";
 
 interface Props {
     data: any;
@@ -57,6 +58,10 @@ export const Categories = ({
     return(
         <div className="relative w-full">
 
+        {/*View All Sidebar*/}
+
+        <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
+
         <div className="relative w-full">
         <div
             ref={measureRef}
@@ -99,6 +104,8 @@ export const Categories = ({
                 <Button
                 className={cn("h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black", 
                                 isActiveCategoryHidden && !isAnyHovered && "bg-white border-primary")}
+
+                onClick={() => setIsSidebarOpen(true)}
                 >
                 View All
                 <ListFilterIcon className="ml-2" />
