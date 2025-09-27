@@ -151,7 +151,7 @@ export const SignUpView = () => {
             <div 
             className="h-screen w-full lg:col-span-2 hidden lg:block"
             style={{ 
-                backgroundImage: "url('/signup.jpg')",
+                backgroundImage: "url('/sign.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
              }}
