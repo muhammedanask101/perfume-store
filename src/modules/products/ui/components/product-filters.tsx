@@ -42,6 +42,21 @@ export const ProductFilters = () => {
 
     const [filters, setFilters] = useProductFilters();
 
+    const hasAnyFilters = Object.entries(filters).some(([ value]) => {
+        if(typeof value === "string"){
+            return value !== "";
+        }
+
+        return value !== "";
+    })
+
+    const onClear = () => {
+        setFilters({
+            minPrice: "",
+            maxPrice: "",
+        })
+    }
+
     const onChange = (key: keyof typeof filters, value: unknown) => {
         setFilters({ ...filters, [key]: value });
     };
@@ -50,12 +65,19 @@ export const ProductFilters = () => {
         <div className="border rounded-md bg-white ">
             <div className="p-4 border-b flex items-center justify-between">
                 <p className="font-medium">Filters</p>
-                <button className="underline" onClick={() => {}} type="button">
+                {hasAnyFilters && (
+                <button className="underline" onClick={() => onClear} type="button">
                     Clear
                 </button>
+                )}
             </div>
             <ProductFilter title="price" className="border-b-0" >
-                <PriceFilter />
+                <PriceFilter 
+                minPrice={filters.minPrice}
+                maxPrice={filters.maxPrice}
+                onMinPriceChange={(value) => onChange("minPrice", value)}
+                onMaxPriceChange={(value) => onChange("maxPrice", value)}
+                />
             </ProductFilter>
         </div>
     )
