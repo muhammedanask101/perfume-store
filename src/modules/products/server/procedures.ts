@@ -16,9 +16,13 @@ export const productsRouter = createTRPCRouter({
         const product = await ctx.db.findByID({
             collection: "products",
             id: input.id,
+            depth: 2,
         });
 
-        return product;
+        return {
+            ...product,
+            image: product.image as Media | null,
+        }
     }),
     getMany: baseProcedure.input(
         z.object({
@@ -82,15 +86,16 @@ export const productsRouter = createTRPCRouter({
                         equals: input.category,
                     }
                 }
-            })
+            });
 
+
+        
         const subcategoriesSlugs = [];
         const formattedData = categoriesData.docs.map((doc) => ({
                 ...doc,
                 subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
                     // because of depth 1 we can say doc will be a type of Category
                     ...(doc as Category),
-                    subcategories: undefined,
                 }))
             }))
         
