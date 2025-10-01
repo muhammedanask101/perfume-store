@@ -6,6 +6,20 @@ import { sortValues } from "../search-params";
 import { DEFAULT_LIMIT } from "@/constants";
 
 export const productsRouter = createTRPCRouter({
+    getOne: baseProcedure
+    .input(
+        z.object({
+            id: z.string(),
+        })
+    )
+    .query(async ({ ctx, input }) => {
+        const product = await ctx.db.findByID({
+            collection: "products",
+            id: input.id,
+        });
+
+        return product;
+    }),
     getMany: baseProcedure.input(
         z.object({
             cursor: z.number().default(1),
@@ -15,6 +29,7 @@ export const productsRouter = createTRPCRouter({
             maxPrice: z.string().nullable().optional(),
             tags: z.array(z.string()).nullable().optional(),
             sort: z.enum(sortValues).nullable().optional(),
+            tenantSlug: z.string().nullable().optional(),
     })
     ).query(async ({ ctx, input }) => {
 
@@ -47,6 +62,12 @@ export const productsRouter = createTRPCRouter({
             where.price = {
                 less_than_equal: input.maxPrice
             }
+        }
+
+        if (input.tenantSlug){
+             where["tenant.slug"] = {
+                equals: input.tenantSlug,
+             }
         }
 
         if(input.category){
