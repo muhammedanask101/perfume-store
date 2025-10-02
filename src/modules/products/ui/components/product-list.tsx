@@ -6,7 +6,6 @@ import { useProductFilters } from "../../hooks/use-product-filters";
 import { ProductCard, ProductCardSkeleton } from "./product-card";
 import { DEFAULT_LIMIT } from "@/constants";
 import { Button } from "@/components/ui/button";
-import { queryObjects } from "v8";
 import { InboxIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -85,9 +84,11 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
     );
 };
 
-export const ProductListSkeleton = () => {
+export const ProductListSkeleton = ({ narrowView }: Props) => {
     return(
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+        <div className={cn("grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4",
+                narrowView && "lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
+            )}>
             {Array.from({ length: DEFAULT_LIMIT }).map((_, index) => (
                 <ProductCardSkeleton key={index} />
             ))}
