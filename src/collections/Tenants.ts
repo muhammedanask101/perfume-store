@@ -33,7 +33,7 @@ export const Tenants: CollectionConfig = {
     {
         name: "stripeAccountId",
         type: "text",
-        required: true,
+       // required: true,
         admin: {
             readOnly: true,
         },

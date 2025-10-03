@@ -12,7 +12,6 @@ import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
 import { Tags } from './collections/Tags'
 import { Tenants } from './collections/Tenants'
-import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,11 +30,6 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    // multiTenantPlugin({
-    //   collections: { products: {} },
-    //   tenantsArrayField: { includeDefaultField: false },
-    //   userHasAccessToAllTenants: (user: any) =>
-    //     Boolean(user?.roles?.includes('super-admin')),
-    // }),
+    // 🚫 multiTenantPlugin intentionally left out for typegen
   ],
 })

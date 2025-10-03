@@ -194,7 +194,6 @@ export interface Category {
  */
 export interface Product {
   id: string;
-  tenant?: (string | null) | Tenant;
   name: string;
   description?: string | null;
   /**
@@ -202,8 +201,10 @@ export interface Product {
    */
   price: number;
   category?: (string | null) | Category;
+  tenant: string | Tenant;
   tags?: (string | Tag)[] | null;
   image?: (string | null) | Media;
+  cover?: (string | null) | Media;
   refundPolicy?: ('30-day' | '14-day' | '7-day' | '3-day' | '1-day' | 'no-refunds') | null;
   updatedAt: string;
   createdAt: string;
@@ -223,7 +224,7 @@ export interface Tenant {
    */
   slug: string;
   image?: (string | null) | Media;
-  stripeAccountId: string;
+  stripeAccountId?: string | null;
   /**
    * You cannot create products until you submit your stripe details
    */
@@ -375,13 +376,14 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  tenant?: T;
   name?: T;
   description?: T;
   price?: T;
   category?: T;
+  tenant?: T;
   tags?: T;
   image?: T;
+  cover?: T;
   refundPolicy?: T;
   updatedAt?: T;
   createdAt?: T;
